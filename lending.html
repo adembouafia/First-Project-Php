@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style1.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600;700&family=Quicksand:wght@300;400;500;700&family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <title>Plan Your Life</title>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="nav">
+        <div class="nav__menu">
+          <div class="nav__logo"></div>
+          <nav>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Features</a></li>
+              <li><a href="#">Pricing</a></li>
+              <li><a href="#">Documentation</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="soc">
+          <ul>
+            <li>
+              <a href="#"> <img src="imgs/soc/f.png" class="soc__img" /></a>
+            </li>
+            <li>
+              <a href="#"> <img src="imgs/soc/tg.png" class="soc__img" /></a>
+            </li>
+            <li>
+              <a href="#"> <img src="imgs/soc/tw.png" class="soc__img" /></a>
+            </li>
+            <li>
+              <a href="#"> <img src="imgs/soc/m.png" class="soc__img" /></a>
+            </li>
+          </ul>
+          <button class="header__but get-started-btn" id="Show_data">Show Users</button>
+          <button class="header__but get-disconnect-btn" id="Disconnect">Disconnect</button>
+        </div>
+      </nav>
+    </header>
+    <section class="hero">
+      <!-- <div class="container d-flex justify-content-center align-items-center" style="height: 50vh;"> -->
+        <div id="table-container" class="d-flex justify-content-center align-items-center" style="height: 40vh;"></div>
+      <!-- </div> -->
+      <div class="hero__line"></div>
+    </section>
+    <section class="customers">
+      <ul>
+        <li><img src="imgs/customers/bitbucket.png" alt="" /></li>
+        <li><img src="imgs/customers/apple-watch.png" alt="" /></li>
+        <li><img src="imgs/customers/facebook.png" alt="" /></li>
+        <li><img src="imgs/customers/Vector.png" alt="" /></li>
+        <li><img src="imgs/customers/audi.png" alt="" /></li>
+      </ul>
+    </section>
+
+    <script>
+      $(document).ready(function() {
+          $('#Show_data').click(function(){
+              $.ajax({
+                  method:'GET',
+                  url:'Users_data.php',
+                  success: function(response){
+                      if (response.length === 0){
+                          Swal.fire({
+                              icon: "error",
+                              title: "Oops...",
+                              text: "No Data found",
+                              footer: '<a href="#">Why do I have this issue?</a>'
+                          });
+                      } else {
+                          const data = JSON.parse(response);
+                          // Création du tableau
+                          const table = $("<table class='table_user'></table>");
+                          // Ajout des en-têtes
+                          const headers = $("<tr><th>ID</th><th>Username</th><th>Email</th></tr>");
+                          table.append(headers);
+                          // Ajout des données utilisateur
+                          data.forEach((user) => {
+                              const row = $("<tr></tr>");
+                              row.append(`<td>${user.id}</td>`);
+                              row.append(`<td>${user.username}</td>`);
+                              row.append(`<td>${user.email}</td>`);
+                              table.append(row);
+                          });
+                          // Ajout du tableau à l'élément body
+                          $("#table-container").empty().append(table);
+                      }
+                  },
+                  error:function(error){
+                      console.log(error);
+                  }
+              });
+          });
+          $('#Disconnect').click(function(){
+            window.location.href = 'index.html';
+          });
+      });
+  </script>
+
+  </body>
+</html>
